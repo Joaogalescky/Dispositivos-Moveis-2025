@@ -1,3 +1,16 @@
+# Atividade 01 - 2º Bimestre
+Este projeto visa compreender como criar um projeto **Node.js** com o **framework Vite** nas linguagens **JavaScript** e **TypeScript**. Abordando sua estrutura, importação, funções, variáveis, métodos, hierarquia, eventos e expressões.
+
+## Execução
+Primeiramente, execute o comando ***npm install*** para instalar os módulos do Node.js
+```bash
+npm install
+```
+Logo após, poderá executar o projeto pelo comando ***npm run dev***
+```bash
+npm run dev
+```
+
 # Exercícios
 
 ## 1. Estrutura do Projeto e Comentários
