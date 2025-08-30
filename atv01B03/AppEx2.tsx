@@ -9,18 +9,6 @@ class Counter extends Component<CounterProp, CounterState> {
     count: 0,
   };
 
-  // incrementar = () => {
-  //   this.setState((prevState) => ({
-  //     count: prevState.count + 1,
-  //   }));
-  // }
-
-  // decrementar = () => {
-  //   this.setState((prevState) => ({
-  //     count: prevState.count - 1,
-  //   }));
-  // }
-
   incrementar = (_event?: GestureResponderEvent) => {
     this.setState((prev) => ({ count: prev.count + 1 }));
   };

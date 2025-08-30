@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 interface GreetingProps {
   name: string;
@@ -7,11 +7,11 @@ interface GreetingProps {
 
 class Greeting extends Component<GreetingProps> {
   render() {
-    const {name, size} = this.props;
+    const { name, size } = this.props;
     const fontSize = size || '14px' // Pode-ser ou tamanho 'size' ou 14px
-    
+
     return (
-      <div style={{fontSize}}>
+      <div style={{ fontSize }}>
         Olá, {name}!
       </div>
     );
