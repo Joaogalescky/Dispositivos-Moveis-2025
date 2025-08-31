@@ -1,6 +1,7 @@
 import Greeting from './AppEx1';
 import Counter from './AppEx2';
 import AppEx3 from './AppEx3';
+import AppEx4 from './AppEx4';
 
 const App = () => (
   // AppEx1
@@ -14,6 +15,10 @@ const App = () => (
 
     <div>
       <AppEx3 />
+    </div>
+
+    <div>
+      <AppEx4 />
     </div>
   </div>
 );
