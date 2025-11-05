@@ -26,15 +26,15 @@ export const Input = styled.TextInput`
   margin-bottom: 15px;
   `;
 
-export const SubmitButton = styled.TouchableOpacity`
+  export const SubmitButton = styled.TouchableOpacity<{ disabled?: boolean }>`
   width: 90%;
   height: 45px;
   border-radius: 8px;
-  background-color: #3b3dbf;
+  background-color: ${({ disabled }) => (disabled ? '#5d5ebdff' : '#3b3dbf')};
   margin-top: 10px;
   justify-content: center;
   align-items: center;
-  `;
+`;
 
 export const SubmitText = styled.Text`
   font-size: 20px;
