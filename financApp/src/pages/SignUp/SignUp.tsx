@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import type { StackScreenProps } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Background,
@@ -11,141 +11,172 @@ import {
   SubmitText,
   Link,
   LinkText,
+  ErrorText,
 } from './styles';
 
-type AuthStackParamList = {
-  SignIn: undefined;
-  SignUp: undefined;
+type NavigationProps = {
+  navigate: (screen: string) => void;
 };
 
-type Props = StackScreenProps<AuthStackParamList, 'SignUp'>;
+export default function SignUp() {
+  const navigation = useNavigation<NavigationProps>();
 
-type State = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  loading: boolean;
-};
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-export default class SignUp extends React.Component<Props, State> {
-  state: State = {
+  const [errors, setErrors] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    loading: false,
+  });
+
+  const validateField = (field: string, value: string) => {
+    const newErrors = {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    };
+
+    switch (field) {
+      case 'name':
+        newErrors.name =
+          value.trim().length < 3 ? 'O nome deve ter pelo menos 3 caracteres' : '';
+        break;
+
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        newErrors.email = !emailRegex.test(value) ? 'Digite um e-mail válido' : '';
+        break;
+
+      case 'password':
+        newErrors.password =
+          value.length < 6 ? 'A senha deve ter pelo menos 6 caracteres' : '';
+        if (confirmPassword && confirmPassword !== value) {
+          newErrors.confirmPassword = 'As senhas não coincidem';
+        } else {
+          newErrors.confirmPassword = '';
+        }
+        break;
+
+      case 'confirmPassword':
+        newErrors.confirmPassword =
+          value !== password ? 'As senhas não coincidem' : '';
+        break;
+    }
+    setErrors(newErrors);
   };
 
-  handleSignUp = () => {
-    const { name, email, password, confirmPassword } = this.state;
-
-    if (name.trim().length < 3) {
-      Alert.alert('Atenção', 'O nome deve ter pelo menos 3 caracteres');
+  const handleSignUp = () => {
+    if (!isFormValid) {
+      Alert.alert('Atenção', 'Verifique os campos antes de continuar');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Atenção', 'Digite um e-mail válido');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Atenção', 'A senha deve ter pelo menos 6 caracteres');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Atenção', 'As senhas não coincidem')
-      return;
-    }
-
-    this.setState({ loading: true });
+    setLoading(true);
 
     setTimeout(() => {
-      this.setState({ loading: false });
-      Alert.alert('Sucesso', 'Conta criada com sucesso!');
-      this.props.navigation.navigate('SignIn');
+      setLoading(false);
+      Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+      navigation.navigate('SignIn');
     }, 1500);
   };
 
-  render() {
-    const { navigation } = this.props;
-    const { name, email, password, confirmPassword, loading } = this.state;
+  const isFormValid =
+    name.trim().length >= 3 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    email.includes('@') &&
+    password.length >= 6 &&
+    password === confirmPassword;
 
-    const isFormValid =
-      name.trim().length >= 3 &&
-      email.includes('@') &&
-      password.length >= 6 &&
-      password === confirmPassword;
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Background>
+        <Container>
+          {errors.name ? <ErrorText>{errors.name}</ErrorText> : null}
+          <AreaInput>
+            <Input
+              placeholder="Nome"
+              autoCapitalize="words"
+              value={name}
+              autoCorrect={false}
+              returnKeyType="next"
+              onChangeText={(text) => {
+                setName(text);
+                validateField('name', text);
+              }}
+            />
+          </AreaInput>
 
-    return (
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        enabled
-      >
-        <Background>
-          <Container>
-            <AreaInput>
-              <Input
-                placeholder="Nome"
-                autoCapitalize="words"
-                value={name}
-                autoCorrect={false}
-                onChangeText={(text) => this.setState({ name: text })}
-                returnKeyType="next"
-              />
-            </AreaInput>
+          {errors.email ? <ErrorText>{errors.email}</ErrorText> : null}
+          <AreaInput>
+            <Input
+              placeholder="Seu email"
+              autoCapitalize="none"
+              value={email}
+              autoCorrect={false}
+              keyboardType="email-address"
+              returnKeyType="next"
+              onChangeText={(text) => {
+                setEmail(text);
+                validateField('email', text);
+              }}
+            />
+          </AreaInput>
+            
+          {errors.password ? <ErrorText>{errors.password}</ErrorText> : null}
+          <AreaInput>
+            <Input
+              placeholder="Sua senha"
+              secureTextEntry
+              value={password}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="go"
+              onChangeText={(text) => {
+                setPassword(text);
+                validateField('password', text);
+              }}
+            />
+          </AreaInput>
+          
+          {errors.confirmPassword ? (<ErrorText>{errors.confirmPassword}</ErrorText>) : null}
+          <AreaInput>
+            <Input
+              placeholder="Confirme sua senha"
+              secureTextEntry
+              value={confirmPassword}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="go"              
+              onChangeText={(text) => {
+                setConfirmPassword(text);
+                validateField('confirmPassword', text);
+              }}
+            />
+          </AreaInput>
 
-            <AreaInput>
-              <Input
-                placeholder="Seu email"
-                autoCapitalize="none"
-                value={email}
-                autoCorrect={false}
-                keyboardType="email-address"
-                onChangeText={(text) => this.setState({ email: text })}
-                returnKeyType="next"
-              />
-            </AreaInput>
+          <SubmitButton
+            activeOpacity={0.8}
+            disabled={!isFormValid || loading}
+            onPress={handleSignUp}
+          >
+            <SubmitText >{loading ? 'Cadastrando...' : 'Cadastrar'}</SubmitText>
+          </SubmitButton>
 
-            <AreaInput>
-              <Input
-                placeholder="Sua senha"
-                secureTextEntry
-                value={password}
-                autoCapitalize="none"
-                autoCorrect={false}
-                onChangeText={(text) => this.setState({ password: text })}
-                returnKeyType="go"
-              />
-            </AreaInput>
-
-            <AreaInput>
-              <Input
-                placeholder="Confirme sua senha"
-                secureTextEntry
-                value={confirmPassword}
-                autoCapitalize="none"
-                autoCorrect={false}
-                onChangeText={(text) => this.setState({ confirmPassword: text })}
-                returnKeyType="go"
-              />
-            </AreaInput>
-
-            <SubmitButton activeOpacity={0.8} disabled={!isFormValid || loading}
-              onPress={this.handleSignUp}>
-              <SubmitText >{loading ? 'Cadastrando...' : 'Cadastrar'}</SubmitText>
-            </SubmitButton>
-
-            <Link onPress={() => navigation.navigate('SignIn')}>
-              <LinkText>Já tem uma conta? Entrar</LinkText>
-            </Link>
-          </Container>
-        </Background>
-      </KeyboardAvoidingView>
-    )
-  }
+          <Link onPress={() => navigation.navigate('SignIn')}>
+            <LinkText>Já tem uma conta? Entrar</LinkText>
+          </Link>
+        </Container>
+      </Background>
+    </KeyboardAvoidingView>
+  );
 }
