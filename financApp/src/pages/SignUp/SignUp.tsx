@@ -12,7 +12,7 @@ import {
   Link,
   LinkText,
   ErrorText,
-} from './styles';
+} from '../SignIn/styles';
 
 type NavigationProps = {
   navigate: (screen: string) => void;

@@ -39,7 +39,7 @@ export const SubmitButton = styled.TouchableOpacity`
 width: 90%;
 height: 45px;
 border-radius: 8px;
-background-color: #3b3dbf;
+  background-color: ${({ disabled }) => (disabled ? '#5d5ebdff' : '#3b3dbf')};
 margin-top: 10px;
 justify-content: center;
 align-items: center;
@@ -56,3 +56,8 @@ margin-bottom: 10px;
 
 export const LinkText = styled.Text`
 color: #171717`;
+
+export const ErrorText = styled.Text`
+  color: #e63946;
+  font-size: 12px;
+  `;
