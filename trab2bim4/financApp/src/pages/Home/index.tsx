@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Modal } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { useAuth } from '../../hooks/useAuth'
 
@@ -25,6 +26,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export default function Home() {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const [listBalance, setListBalance] = useState<Balance[]>([]);
   const [movements, setMovements] = useState<Movement[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -102,6 +104,12 @@ export default function Home() {
           <Icon name="event" color="#121212" size={30} />
         </TouchableOpacity>
         <Title>Ultimas movimentações</Title>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Perfil')}
+          style={{ marginLeft: 'auto' }}
+        >
+          <Icon name="person" color="#121212" size={30} />
+        </TouchableOpacity>
       </Area>
 
       <List
@@ -119,6 +127,26 @@ export default function Home() {
         />
       </Modal>
 
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          bottom: 30,
+          right: 30,
+          backgroundColor: '#3b3dbf',
+          width: 60,
+          height: 60,
+          borderRadius: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          elevation: 5,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+        }}
+        onPress={() => navigation.navigate('Registrar')}
+      >
+        <Icon name="add" color="#FFF" size={30} />
+      </TouchableOpacity>
 
     </Background>
   )
