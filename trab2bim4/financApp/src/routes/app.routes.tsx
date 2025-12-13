@@ -1,49 +1,50 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from '../pages/Home';
 import New from '../pages/New';
 import Profile from '../pages/Profile';
 
-import CustomDrawer from '../components/CustomDrawer';
+export type AppStackParamList = {
+  Home: undefined;
+  Registrar: undefined;
+  Perfil: undefined;
+};
 
-const AppDrawer = createDrawerNavigator();
+const AppStack = createNativeStackNavigator<AppStackParamList>();
 
-function AppRoutes(){
-  return(
-    <AppDrawer.Navigator
-      drawerContent={ (props) => <CustomDrawer {...props} /> }
+function AppRoutes() {
+  return (
+    <AppStack.Navigator
       screenOptions={{
-        headerShown:false,
-
-        drawerStyle:{
-          backgroundColor: '#FFF',
-          paddingTop: 20,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#3b3dbf',
         },
-
-        drawerActiveBackgroundColor:'#3b3dbf',
-        drawerActiveTintColor: '#FFF',
-
-        drawerInactiveBackgroundColor: '#F0F2FF',
-        drawerInactiveTintColor: '#121212'
-
+        headerTintColor: '#FFF',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
       }}
     >
-      <AppDrawer.Screen
+      <AppStack.Screen
         name="Home"
         component={Home}
+        options={{ title: 'Início' }}
       />
 
-      <AppDrawer.Screen
+      <AppStack.Screen
         name="Registrar"
         component={New}
+        options={{ title: 'Nova Transação' }}
       />
 
-      <AppDrawer.Screen
+      <AppStack.Screen
         name="Perfil"
         component={Profile}
+        options={{ title: 'Perfil' }}
       />
-    </AppDrawer.Navigator>
+    </AppStack.Navigator>
   )
 }
 
