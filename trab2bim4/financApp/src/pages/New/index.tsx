@@ -19,42 +19,38 @@ export default function New() {
   function handleSubmit() {
     Keyboard.dismiss();
 
-    if (isNaN(parseFloat(valueInput)) || type === null) {
-      alert('Preencha todos os campos')
+    if (labelInput === '' || valueInput === '') {
+      alert('Preencha todos os campos');
       return;
     }
 
-    Alert.alert(
-      'Confirmando dados',
-      `Tipo: ${type} - Valor: ${parseFloat(valueInput)}`,
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel'
-        },
-        {
-          text: 'Continuar',
-          onPress: () => handleAdd()
-        }
-      ]
-    )
+    if (isNaN(parseFloat(valueInput))) {
+      alert('Digite um valor válido');
+      return;
+    }
 
+    handleAdd();
   }
 
 
   async function handleAdd() {
     Keyboard.dismiss();
 
-    await api.post('/receive', {
-      description: labelInput,
-      value: Number(valueInput),
-      type: type,
-      date: format(new Date(), 'dd/MM/yyyy')
-    })
-
-    setLabelInput('');
-    setValueInput('');
-    navigation.navigate('Home')
+    try {
+      await api.post('/receive', {
+        description: labelInput,
+        value: Number(valueInput),
+        type: type,
+        date: format(new Date(), 'dd/MM/yyyy')
+      });
+      
+      setLabelInput('');
+      setValueInput('');
+      alert('Transação registrada com sucesso!');
+      navigation.navigate('Home');
+    } catch (err: any) {
+      alert('Erro ao registrar transação');
+    }
   }
 
   return (
