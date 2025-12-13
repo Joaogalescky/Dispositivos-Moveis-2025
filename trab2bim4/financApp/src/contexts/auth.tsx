@@ -80,8 +80,14 @@ function AuthProvider({ children }: AuthProviderProps) {
       navigation.goBack();
 
 
-    } catch (err) {
-      console.log("ERRO AO CADASTRAR", err);
+    } catch (err: any) {
+      let errorMessage = 'Erro ao cadastrar';
+      
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
+      
+      alert(errorMessage);
       setLoadingAuth(false);
     }
   }
@@ -116,8 +122,16 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       setLoadingAuth(false);
 
-    } catch (err) {
-      console.log("ERRO AO LOGAR ", err);
+    } catch (err: any) {
+      let errorMessage = 'Erro ao fazer login';
+      
+      if (err.response?.status === 401) {
+        errorMessage = 'Email ou senha inválidos';
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
+      
+      alert(errorMessage);
       setLoadingAuth(false);
     }
 

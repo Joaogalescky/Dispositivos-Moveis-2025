@@ -22,8 +22,28 @@ export default function SignUp() {
 
   const navigation = useNavigation();
 
+  function validateEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
   async function handleSignUp() {
-    if (nome === '' || email === '' || password === '') return;
+    if (nome === '' || email === '' || password === '') {
+      alert('Preencha todos os campos');
+      return; 
+    }
+    if (!validateEmail(email)) {
+      alert('Digite um email válido');
+      return;
+    }
+    if (password.length < 6) {
+      alert('A senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+    if (password !== confirm) {
+      alert('Senhas não coincidem');
+      return;
+    }
     await signUp(email, password, nome);
   }
 

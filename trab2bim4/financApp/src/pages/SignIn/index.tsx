@@ -24,9 +24,17 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
-  function handleLogin() {
-    signIn(email, password);
+  
+  async function handleLogin() {
+    if (email === '' || password === '') {
+      alert('Preencha todos os campos');
+      return;
+    }
+    if (password.length < 6) {
+      alert('A senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+    await signIn(email, password);
   }
 
   return (
