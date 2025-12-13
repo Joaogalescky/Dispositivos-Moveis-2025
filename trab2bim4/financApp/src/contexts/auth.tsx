@@ -1,14 +1,33 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect, useState, ReactNode } from 'react';
 
-import api from '../services/api';
 import { useNavigation } from '@react-navigation/native';
+import api from '../services/api';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const AuthContext = createContext({});
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
-function AuthProvider({ children }){
-  const [user, setUser] = useState(null); 
+interface AuthContextData {
+  signed: boolean;
+  user: User | null;
+  signUp: (email: string, password: string, nome: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  loadingAuth: boolean;
+  loading: boolean;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+
+function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -16,19 +35,19 @@ function AuthProvider({ children }){
 
 
   useEffect(() => {
-    async function loadStorage(){
+    async function loadStorage() {
       const storageUser = await AsyncStorage.getItem('@finToken');
 
-      if(storageUser){
+      if (storageUser) {
 
         const response = await api.get('/me', {
-          headers:{
+          headers: {
             'Authorization': `Bearer ${storageUser}`
           }
         })
-        .catch(()=>{
-          setUser(null);
-        })
+          .catch(() => {
+            setUser(null);
+          })
 
         api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
         setUser(response.data);
@@ -44,30 +63,30 @@ function AuthProvider({ children }){
   }, [])
 
 
-  async function signUp(email, password, nome){
+  async function signUp(email, password, nome) {
     setLoadingAuth(true);
 
-    try{
+    try {
       const response = await api.post('/users', {
-       name: nome,
-       password: password,
-       email: email,
+        name: nome,
+        password: password,
+        email: email,
       })
       setLoadingAuth(false);
 
       navigation.goBack();
 
 
-    }catch(err){
+    } catch (err) {
       console.log("ERRO AO CADASTRAR", err);
       setLoadingAuth(false);
     }
   }
 
-  async function signIn(email, password){
+  async function signIn(email, password) {
     setLoadingAuth(true);
 
-    try{
+    try {
       const response = await api.post('/login', {
         email: email,
         password: password
@@ -94,7 +113,7 @@ function AuthProvider({ children }){
 
       setLoadingAuth(false);
 
-    }catch(err){
+    } catch (err) {
       console.log("ERRO AO LOGAR ", err);
       setLoadingAuth(false);
     }
@@ -102,14 +121,14 @@ function AuthProvider({ children }){
   }
 
 
-  async function signOut(){
+  async function signOut() {
     await AsyncStorage.clear()
-    .then(() => {
-      setUser(null);
-    })
+      .then(() => {
+        setUser(null);
+      })
   }
 
-  return(
+  return (
     <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loadingAuth, loading }}>
       {children}
     </AuthContext.Provider>
