@@ -24,11 +24,10 @@ export default function New() {
       return;
     }
 
-    if (isNaN(parseFloat(valueInput))) {
-      alert('Digite um valor válido');
+    if (valueInput === '' || parseFloat(valueInput) <= 0) {
+      alert('Digite um valor maior que zero');
       return;
     }
-
     handleAdd();
   }
 
@@ -39,11 +38,11 @@ export default function New() {
     try {
       await api.post('/receive', {
         description: labelInput,
-        value: Number(valueInput),
+        value: Math.abs(Number(valueInput)),
         type: type,
         date: format(new Date(), 'dd/MM/yyyy')
       });
-      
+
       setLabelInput('');
       setValueInput('');
       alert('Transação registrada com sucesso!');
@@ -67,7 +66,12 @@ export default function New() {
             placeholder="Valor desejado"
             keyboardType="numeric"
             value={valueInput}
-            onChangeText={(text) => setValueInput(text)}
+            onChangeText={(text) => {
+              let numericValue = text.replace(/,/g, '.').replace(/[^0-9.]/g, '');
+              const parts = numericValue.split('.');
+              const filteredValue = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : numericValue;
+              setValueInput(filteredValue);
+            }}
           />
 
           <RegisterTypes type={type} sendTypeChanged={(item) => setType(item)} />
