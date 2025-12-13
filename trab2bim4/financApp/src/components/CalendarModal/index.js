@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { 
   Container, 
   ButtonFilterText,
@@ -43,9 +43,9 @@ export default function CalendarModal({ setVisible, handleFilter }){
 
   return(
     <Container>
-      <TouchableWithoutFeedback onPress={setVisible}>
+      <Pressable onPress={setVisible} style={{ flex: 1 }}>
         <View style={{ flex:1 }}></View>
-      </TouchableWithoutFeedback>
+      </Pressable>
 
       <ModalContent>
         

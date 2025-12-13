@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Background, Input, SubmitButton, SubmitText } from './styles';
-import { SafeAreaView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { SafeAreaView, Pressable, Keyboard, Alert } from 'react-native';
 
 import Header from '../../components/Header'
 import RegisterTypes from '../../components/RegisterTypes';
@@ -59,7 +59,7 @@ export default function New(){
   }
 
   return(
-    <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() } >
+    <Pressable onPress={ () => Keyboard.dismiss() } >
       <Background>
         <Header title="Registrando" />
 
@@ -85,6 +85,6 @@ export default function New(){
 
         </SafeAreaView>
       </Background>
-    </TouchableWithoutFeedback>
+    </Pressable>
   )
 }
