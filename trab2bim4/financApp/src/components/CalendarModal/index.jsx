@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { 
-  Container, 
+import {
+  Container,
   ButtonFilterText,
   ModalContent,
   ButtonFilter
- } from './styles';
+} from './styles';
 
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { ptBR } from './localeCalendar';
@@ -14,11 +14,11 @@ LocaleConfig.locales['pt-br'] = ptBR;
 LocaleConfig.defaultLocale = 'pt-br';
 
 
-export default function CalendarModal({ setVisible, handleFilter }){
+export default function CalendarModal({ setVisible, handleFilter }) {
   const [dateNow, setDateNow] = useState(new Date())
   const [markeddates, setMarkedDates] = useState({});
 
-  function handleOnDayPress(date){
+  function handleOnDayPress(date) {
     //console.log(date.dateString);
     setDateNow(new Date(date.dateString));
 
@@ -36,28 +36,28 @@ export default function CalendarModal({ setVisible, handleFilter }){
   }
 
 
-  function handleFilterDate(){
+  function handleFilterDate() {
     handleFilter(dateNow);
     setVisible();
   }
 
-  return(
+  return (
     <Container>
       <Pressable onPress={setVisible} style={{ flex: 1 }}>
-        <View style={{ flex:1 }}></View>
+        <View style={{ flex: 1 }}></View>
       </Pressable>
 
       <ModalContent>
-        
+
         <Calendar
-         onDayPress={handleOnDayPress}
-         markedDates={markeddates}
-         enableSwipeMonths={true}
-         theme={{
-           todayTextColor: '#FF0000',
-           selectedDayBackgroundColor: '#00adf5',
-           selectedDayTextColor: '#FFF'
-         }}
+          onDayPress={handleOnDayPress}
+          markedDates={markeddates}
+          enableSwipeMonths={true}
+          theme={{
+            todayTextColor: '#FF0000',
+            selectedDayBackgroundColor: '#00adf5',
+            selectedDayTextColor: '#FFF'
+          }}
         />
 
         <ButtonFilter onPress={handleFilterDate}>

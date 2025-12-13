@@ -1,7 +1,7 @@
-import React, { createContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import api from '../services/api';
+import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -24,6 +24,7 @@ interface AuthContextData {
 interface AuthProviderProps {
   children: ReactNode;
 }
+
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
@@ -40,17 +41,19 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       if (storageUser) {
 
-        const response = await api.get('/me', {
-          headers: {
-            'Authorization': `Bearer ${storageUser}`
-          }
-        })
-          .catch(() => {
-            setUser(null);
+        try {
+          const response = await api.get('/me', {
+            headers: {
+              'Authorization': `Bearer ${storageUser}`
+            }
           })
 
-        api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
-        setUser(response.data);
+          api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
+          setUser(response.data);
+        } catch (error) {
+          setUser(null);
+          await AsyncStorage.removeItem('@finToken');
+        }
         setLoading(false);
 
       }
@@ -63,7 +66,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
 
-  async function signUp(email, password, nome) {
+  async function signUp(email: string, password: string, nome: string) {
     setLoadingAuth(true);
 
     try {
@@ -83,7 +86,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signIn(email, password) {
+  async function signIn(email: string, password: string) {
     setLoadingAuth(true);
 
     try {

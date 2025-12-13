@@ -1,25 +1,25 @@
 import React from 'react';
 import {
-  Container, 
+  Container,
   TipoText,
   Tipo,
   IconView,
   ValorText
 } from './styles';
-import { Pressable, Alert} from 'react-native';
+import { Pressable, Alert } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 
 
-export default function HistoricoList({ data, deleteItem }){
+export default function HistoricoList({ data, deleteItem }) {
 
-  function handleDeleteItem(){
+  function handleDeleteItem() {
     Alert.alert(
       'Atenção',
       'Você tem certeza que deseja deletar esse registro?',
       [
         {
-          text:'Cancelar',
+          text: 'Cancelar',
           style: 'cancel',
         },
         {
@@ -30,15 +30,15 @@ export default function HistoricoList({ data, deleteItem }){
     )
   }
 
-  return(
+  return (
     <Pressable onLongPress={handleDeleteItem}>
       <Container>
         <Tipo>
           <IconView tipo={data.type}>
-            <Icon 
+            <Icon
               name={data.type === 'despesa' ? 'arrow-down' : 'arrow-up'}
-              size={20} 
-              color="#FFF" 
+              size={20}
+              color="#FFF"
             />
             <TipoText>{data.type}</TipoText>
           </IconView>

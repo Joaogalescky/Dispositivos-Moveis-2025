@@ -3,18 +3,18 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { Container, Title, ButtonMenu} from './styles';
+import { Container, Title, ButtonMenu } from './styles';
 
-export default function Header({ title }){
+export default function Header({ title }) {
   const navigation = useNavigation();
 
-  return(
+  return (
     <Container>
-      <ButtonMenu onPress={ () => navigation.openDrawer() }>
-        <Icon name="menu" size={35} color="#121212"/>
+      <ButtonMenu onPress={() => navigation.openDrawer()}>
+        <Icon name="menu" size={35} color="#121212" />
       </ButtonMenu>
 
-      { title && (
+      {title && (
         <Title>
           {title}
         </Title>
