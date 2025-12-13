@@ -1,44 +1,43 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import { 
-  Background, 
-  Container, 
-  AreaInput, 
-  Input, 
-  SubmitButton, 
+import {
+  Background,
+  Container,
+  AreaInput,
+  Input,
+  SubmitButton,
   SubmitText
 } from '../SignIn/styles';
 
-import { AuthContext } from '../../contexts/auth';
+import { useAuth } from '../../hooks/useAuth';
 
-
-export default function SignUp(){
-
-  const { signUp, loadingAuth } = useContext(AuthContext)
-
+export default function SignUp() {
+  const { signUp, loadingAuth } = useAuth();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
 
-  function handleSignUp(){
-    if(nome === '' || email === '' || password === '') return;
+  const navigation = useNavigation();
 
-    signUp(email, password, nome);
+  async function handleSignUp() {
+    if (nome === '' || email === '' || password === '') return;
+    await signUp(email, password, nome);
   }
 
-  return(
+  return (
     <Background>
       <Container
         behavior={Platform.OS === 'ios' ? 'padding' : ''}
         enabled
       >
-
         <AreaInput>
           <Input
             placeholder="Nome"
             value={nome}
-            onChangeText={ (text) => setNome(text) }
+            onChangeText={(text) => setNome(text)}
           />
         </AreaInput>
 
@@ -46,7 +45,9 @@ export default function SignUp(){
           <Input
             placeholder="Seu email"
             value={email}
-            onChangeText={ (text) => setEmail(text) }
+            autoCapitalize="none"
+            keyboardType="email-address"
+            onChangeText={(text) => setEmail(text)}
           />
         </AreaInput>
 
@@ -54,12 +55,21 @@ export default function SignUp(){
           <Input
             placeholder="Sua senha"
             value={password}
-            onChangeText={ (text) => setPassword(text) }
-            secureTextEntry={true}
+            secureTextEntry
+            onChangeText={(text) => setPassword(text)}
           />
         </AreaInput>
 
-        <SubmitButton onPress={handleSignUp}>
+        <AreaInput>
+          <Input
+            placeholder="Confirmação de senha"
+            value={confirm}
+            secureTextEntry
+            onChangeText={(text) => setConfirm(text)}
+          />
+        </AreaInput>
+
+        <SubmitButton activeOpacity={0.8} onPress={handleSignUp}>
           {
             loadingAuth ? (
               <ActivityIndicator size={20} color="#FFF" />
@@ -68,9 +78,7 @@ export default function SignUp(){
             )
           }
         </SubmitButton>
-
       </Container>
-
     </Background>
-  )
+  );
 }

@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Modal } from 'react-native';
 
+import { useAuth } from '../../hooks/useAuth'
 
 import {
-  Area,
   Background,
-  List,
   ListBalance,
-  Title
+  Area,
+  Title,
+  List
 } from './styles';
 
+import api from '../../services/api'
 import { format } from 'date-fns';
-import api from '../../services/api';
 
 import { useIsFocused } from '@react-navigation/native';
 import BalanceItem from '../../components/BalanceItem';
-import CalendarModal from '../../components/CalendarModal';
 import HistoricoList from '../../components/HistoricoList';
+import CalendarModal from '../../components/CalendarModal';
 import { Balance, Movement } from '../../types';
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 
 export default function Home() {

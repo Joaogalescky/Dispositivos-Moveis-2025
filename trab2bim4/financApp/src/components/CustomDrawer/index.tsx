@@ -1,14 +1,13 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { View, Text, Image } from 'react-native';
+import { DrawerContentComponentProps, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer';
 
-import { DrawerItemList, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { useAuth } from '../../hooks/useAuth';
 
-import { AuthContext } from '../../contexts/auth';
+export default function CustomDrawer(props: DrawerContentComponentProps) {
+  const { user, signOut } = useAuth();
 
-export default function CustomDrawer(props){
-  const { user, signOut } = useContext(AuthContext);
-
-  return(
+  return (
     <DrawerContentScrollView {...props}>
       <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 25 }}>
         <Image
@@ -21,9 +20,9 @@ export default function CustomDrawer(props){
           Bem-vindo
         </Text>
 
-        <Text 
-        style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 14, paddingHorizontal: 20 }}
-        numberOfLines={1}
+        <Text
+          style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 14, paddingHorizontal: 20 }}
+          numberOfLines={1}
         >
           {user && user.name}
         </Text>

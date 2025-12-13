@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
 
-import { 
-  Background, 
-  Container, 
-  Logo, 
-  AreaInput, 
-  Input, 
-  SubmitButton, 
+import {
+  Background,
+  Container,
+  Logo,
+  AreaInput,
+  Input,
+  SubmitButton,
   SubmitText,
   Link,
   LinkText
@@ -15,21 +15,21 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 
-import { AuthContext } from '../../contexts/auth'
+import { useAuth } from '../../hooks/useAuth'
 
-export default function SignIn(){
+export default function SignIn() {
   const navigation = useNavigation();
-  const { signIn, loadingAuth } = useContext(AuthContext);
+  const { signIn, loadingAuth } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
-  function handleLogin(){
+  function handleLogin() {
     signIn(email, password);
   }
 
-  return(
+  return (
     <Background>
 
       <Container
@@ -44,7 +44,7 @@ export default function SignIn(){
           <Input
             placeholder="Seu email"
             value={email}
-            onChangeText={ (text) => setEmail(text) }
+            onChangeText={(text) => setEmail(text)}
           />
         </AreaInput>
 
@@ -52,7 +52,7 @@ export default function SignIn(){
           <Input
             placeholder="Sua senha"
             value={password}
-            onChangeText={ (text) => setPassword(text) }
+            onChangeText={(text) => setPassword(text)}
             secureTextEntry={true}
           />
         </AreaInput>
@@ -67,7 +67,7 @@ export default function SignIn(){
           }
         </SubmitButton>
 
-        <Link onPress={ () => navigation.navigate('SignUp') }>
+        <Link onPress={() => navigation.navigate('SignUp')}>
           <LinkText>Criar uma conta!</LinkText>
         </Link>
 

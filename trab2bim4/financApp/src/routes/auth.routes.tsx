@@ -4,12 +4,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 
-const AuthStack = createNativeStackNavigator();
+export type AuthStackParamList = {
+  SignIn: undefined;
+  SignUp: undefined;
+};
 
-function AuthRoutes(){
-  return(
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
+
+function AuthRoutes() {
+  return (
     <AuthStack.Navigator>
-      <AuthStack.Screen 
+      <AuthStack.Screen
         name="SignIn"
         component={SignIn}
         options={{
@@ -21,7 +26,7 @@ function AuthRoutes(){
         name="SignUp"
         component={SignUp}
         options={{
-          headerStyle:{
+          headerStyle: {
             backgroundColor: '#3b3dbf',
             borderBottomWidth: 1,
             borderBottomColor: '#00b94a'

@@ -3,24 +3,23 @@ import React, { useState } from 'react';
 import { Background, Input, SubmitButton, SubmitText } from './styles';
 import { SafeAreaView, Pressable, Keyboard, Alert } from 'react-native';
 
-import Header from '../../components/Header'
 import RegisterTypes from '../../components/RegisterTypes';
 
 import api from '../../services/api';
 import { format } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 
-export default function New(){
+export default function New() {
   const navigation = useNavigation();
 
   const [labelInput, setLabelInput] = useState('');
   const [valueInput, setValueInput] = useState('');
-  const [type, setType] = useState('receita');
+  const [type, setType] = useState<'receita' | 'despesa'>('receita');
 
-  function handleSubmit(){
+  function handleSubmit() {
     Keyboard.dismiss();
 
-    if(isNaN(parseFloat(valueInput)) || type === null){
+    if (isNaN(parseFloat(valueInput)) || type === null) {
       alert('Preencha todos os campos')
       return;
     }
@@ -35,7 +34,7 @@ export default function New(){
         },
         {
           text: 'Continuar',
-          onPress: () => handleAdd() 
+          onPress: () => handleAdd()
         }
       ]
     )
@@ -43,7 +42,7 @@ export default function New(){
   }
 
 
-  async function handleAdd(){
+  async function handleAdd() {
     Keyboard.dismiss();
 
     await api.post('/receive', {
@@ -58,26 +57,24 @@ export default function New(){
     navigation.navigate('Home')
   }
 
-  return(
-    <Pressable onPress={ () => Keyboard.dismiss() } >
+  return (
+    <Pressable onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
       <Background>
-        <Header title="Registrando" />
-
-        <SafeAreaView style={{marginTop: 14, alignItems: 'center' }}>
+        <SafeAreaView style={{ marginTop: 14, alignItems: 'center' }}>
           <Input
             placeholder="Descrição desse registro"
             value={labelInput}
-            onChangeText={ (text) => setLabelInput(text) }
+            onChangeText={(text) => setLabelInput(text)}
           />
 
           <Input
             placeholder="Valor desejado"
             keyboardType="numeric"
             value={valueInput}
-            onChangeText={ (text) => setValueInput(text) }
+            onChangeText={(text) => setValueInput(text)}
           />
 
-          <RegisterTypes type={type} sendTypeChanged={ (item) => setType(item) } />
+          <RegisterTypes type={type} sendTypeChanged={(item) => setType(item)} />
 
           <SubmitButton onPress={handleSubmit}>
             <SubmitText>Registrar</SubmitText>
